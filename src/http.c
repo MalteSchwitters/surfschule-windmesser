@@ -21,6 +21,7 @@ int sendToServer(int min, int avg, int max) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
         }
     }
+    return 1;
 }
 
 int initHttp() {

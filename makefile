@@ -2,7 +2,7 @@ client: main.o
 	clang -o client main.o -lcurl -lwiringPi
 
 main.o: src/main.c sensor.o http.o
-	clang -c src/main.c sensor.o http.o
+	clang -c src/main.c
 
 sensor.o: src/sensor.c
 	clang -c src/sensor.c

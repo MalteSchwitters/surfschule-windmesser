@@ -9,7 +9,7 @@ volatile int counter = 0;
 
 void sensorInterrupt(void) {
 	counter++;
-	printf("Interrupt #%i!\n", counter);
+	//printf("Interrupt #%i!\n", counter);
 }
 
 int readSensor() {

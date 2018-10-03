@@ -27,13 +27,17 @@ int max(int *array, int arraylen) {
 	return result;
 }
 
-int avg(int *array, int arraylen) {
+int sum(int *array, int arraylen) {
 	int result;
 	int i;
 	for (i=0; i<=arraylen; i++) {
 		result += array[i];
 	}
-	return result / arraylen;
+	return result;
+}
+
+int avg(int *array, int arraylen) {
+	return sum(array, arraylen) / arraylen;
 }
 
 void loop() {
@@ -41,15 +45,19 @@ void loop() {
 	int i;
 	
 	while (running) {
-		//printf("RPM: %d\n", counter);
-		//counter = 0;
-		
 		for(i=0; i<=60; i++) {
 			minute[i] = counter;
 			counter = 0;
+			printf("-");
+			fflush(stdout);
 			delay(1000);
-			//sendToServer(0, 0, 0);
 		}
+		printf("\n");
+		printf("RPM: %i\n", sum(minute, 60));
+		printf("AVG: %i\n", avg(minute, 60));
+		printf("MIN: %i\n", min(minute, 60));
+		printf("MAX: %i\n", max(minute, 60));
+		//sendToServer(0, 0, 0);
 	}
 }
 
