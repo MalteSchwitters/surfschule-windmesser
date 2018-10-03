@@ -3,7 +3,6 @@
 #include "sensor.c"
 #include "http.c"
 
-
 int running = 1;
 
 int main(int argc, char **args) {

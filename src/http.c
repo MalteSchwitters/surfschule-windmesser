@@ -3,7 +3,7 @@
 
 CURL *curl;
 char apikey[] = "**********";
-char baseurl[14] = "https://api.grosses-meer.surf/api/";
+char baseurl[] = "https://api.grosses-meer.surf/api/";
 
 void cleanup() {
     curl_easy_cleanup(curl);
