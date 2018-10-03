@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <errno.h>
 #include <curl/curl.h>
 #include <wiringPi.h>
@@ -36,27 +37,37 @@ int readSensor() {
 }
 
 void sensorInterrupt(void) {
-	printf("Interrupt!\n");
+	time_t rawtime;
+ 	struct tm * timeinfo;
+
+	time(&rawtime);
+	timeinfo = localtime (&rawtime);
+	printf("%s - New Interrupt!\n", asctime (timeinfo));
 	counter++;
 }
 
 int init() {
-	wiringPiSetup () ;
-	//pinMode (0, INTPUT) ;
+	if (wiringPiSetup() < 0) {
+		fprintf (stderr, "Unable to setup wiringPi: %s\n", strerror(errno));
+		return 1;
+	}
 	if (wiringPiISR(SENSOR_PIN, INT_EDGE_FALLING, &sensorInterrupt) < 0 ) {
-		fprintf (stderr, "Unable to setup ISR: %s\n", strerror (errno));
+		fprintf (stderr, "Unable to setup ISR: %s\n", strerror(errno));
 		return 1;
 	}
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 	curl = curl_easy_init();
+	return 0;
 }
 
 int main(int argc, char **args) {
-	init();
+	if (init() != 0) {
+		return 1;
+	}
 	while (1) {
 		printf("RPM: %d\n", counter);
 		counter = 0;
-		delay(60 * 1000);
+		delay(5 * 1000);
 	}
 	sendToServer();
 	return 0;
