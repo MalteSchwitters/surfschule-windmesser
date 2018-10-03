@@ -1,32 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <errno.h>
-#include <curl/curl.h>
-#include <wiringPi.h>
+#include "sensor.c"
+#include "http.c"
 
-#define SENSOR_PIN 0
 
 int running = 1;
-CURL *curl;
-volatile int counter = 0;
 
 
-void cleanup() {
-	curl_easy_cleanup(curl);
-}
-
-void sendToServer() {
-	CURLcode res;
-	if (curl) {
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.grosses-meer.surf/api/status");
-		res = curl_easy_perform(curl);
-	        if(res != CURLE_OK) {
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-		}
-	}
-}
 
 int readSensor() {
 	while(1) {
@@ -37,30 +17,10 @@ int readSensor() {
 	return 0;
 }
 
-void sensorInterrupt(void) {
-	counter++;
-	printf("Interrupt #%i!\n", counter);
-}
-
-int init() {
-	if (wiringPiSetup() < 0) {
-		fprintf (stderr, "Unable to setup wiringPi: %s\n", strerror(errno));
-		return 1;
-	}
-	pinMode(SENSOR_PIN, INPUT);
-	if (wiringPiISR(SENSOR_PIN, INT_EDGE_RISING, &sensorInterrupt) < 0 ) {
-		fprintf (stderr, "Unable to setup ISR: %s\n", strerror(errno));
-		return 1;
-	}
-	curl_global_init(CURL_GLOBAL_DEFAULT);
-	curl = curl_easy_init();
-	return 0;
-}
-
 int main(int argc, char **args) {
-	if (init() != 0) {
-		return 1;
-	}
+	initSensor();
+	initHttp();
+	
 	while (running) {
 		//printf("RPM: %d\n", counter);
 		//counter = 0;
