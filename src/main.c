@@ -39,14 +39,13 @@ void sensorInterrupt(void) {
 	counter++;
 }
 
-void init() {
+int init() {
 	wiringPiSetup () ;
 	//pinMode (0, INTPUT) ;
 	if (wiringPiISR(SENSOR_PIN, INT_EDGE_FALLING, &sensorInterrupt) < 0 ) {
-      fprintf (stderr, "Unable to setup ISR: %s\n", strerror (errno));
-      return 1;
-  }
-
+		fprintf (stderr, "Unable to setup ISR: %s\n", strerror (errno));
+		return 1;
+	}
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 	curl = curl_easy_init();
 }
@@ -59,4 +58,5 @@ int main(int argc, char **args) {
 		delay(60 * 1000);
 	}
 	sendToServer();
+	return 0;
 }
