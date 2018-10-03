@@ -36,6 +36,7 @@ int readSensor() {
 }
 
 void sensorInterrupt(void) {
+	printf("Interrupt!\n");
 	counter++;
 }
 
