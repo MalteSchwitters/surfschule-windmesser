@@ -8,6 +8,7 @@
 
 #define SENSOR_PIN 0
 
+int running = 1;
 CURL *curl;
 volatile int counter = 0;
 
@@ -37,13 +38,8 @@ int readSensor() {
 }
 
 void sensorInterrupt(void) {
-	time_t rawtime;
- 	struct tm * timeinfo;
-
-	time(&rawtime);
-	timeinfo = localtime (&rawtime);
-	printf("%s - New Interrupt!\n", asctime (timeinfo));
 	counter++;
+	printf("Interrupt #%i!\n", counter);
 }
 
 int init() {
@@ -51,7 +47,8 @@ int init() {
 		fprintf (stderr, "Unable to setup wiringPi: %s\n", strerror(errno));
 		return 1;
 	}
-	if (wiringPiISR(SENSOR_PIN, INT_EDGE_FALLING, &sensorInterrupt) < 0 ) {
+	pinMode(SENSOR_PIN, INPUT);
+	if (wiringPiISR(SENSOR_PIN, INT_EDGE_RISING, &sensorInterrupt) < 0 ) {
 		fprintf (stderr, "Unable to setup ISR: %s\n", strerror(errno));
 		return 1;
 	}
@@ -64,11 +61,11 @@ int main(int argc, char **args) {
 	if (init() != 0) {
 		return 1;
 	}
-	while (1) {
-		printf("RPM: %d\n", counter);
-		counter = 0;
-		delay(5 * 1000);
+	while (running) {
+		//printf("RPM: %d\n", counter);
+		//counter = 0;
+		delay(60 * 1000);
+		//sendToServer();
 	}
-	sendToServer();
 	return 0;
 }
