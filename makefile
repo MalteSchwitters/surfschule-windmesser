@@ -12,4 +12,4 @@ http.o: src/http.c
 
 clean:
 	rm client
-	rm main.o
+	rm *.o

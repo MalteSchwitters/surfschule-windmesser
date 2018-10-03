@@ -6,17 +6,6 @@
 
 int running = 1;
 
-
-
-int readSensor() {
-	while(1) {
-		waitForInterrupt(SENSOR_PIN, -1) ;
-		int value = digitalRead(0);
-		printf("Sensor value: %i\n", value);
-	}
-	return 0;
-}
-
 int main(int argc, char **args) {
 	initSensor();
 	initHttp();
