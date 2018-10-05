@@ -5,10 +5,10 @@
 
 int running = 1;
 
-int min(int *array, int arraylen) {
+int calcMin(int *array, int arraylen) {
 	int result;
 	int i;
-	for (i=0; i<=arraylen; i++) {
+	for (i=0; i<arraylen; i++) {
 		if (array[i] < result) {
 			result = array[i];
 		}
@@ -16,10 +16,10 @@ int min(int *array, int arraylen) {
 	return result;
 }
 
-int max(int *array, int arraylen) {
+int calcMax(int *array, int arraylen) {
 	int result;
 	int i;
-	for (i=0; i<=arraylen; i++) {
+	for (i=0; i<arraylen; i++) {
 		if (array[i] > result) {
 			result = array[i];
 		}
@@ -27,37 +27,39 @@ int max(int *array, int arraylen) {
 	return result;
 }
 
-int sum(int *array, int arraylen) {
+int calcSum(int *array, int arraylen) {
 	int result;
 	int i;
-	for (i=0; i<=arraylen; i++) {
+	for (i=0; i<arraylen; i++) {
 		result += array[i];
 	}
 	return result;
 }
 
-int avg(int *array, int arraylen) {
-	return sum(array, arraylen) / arraylen;
-}
-
-void loop() {
+void loop() {	
 	int minute[60];
 	int i;
 	
 	while (running) {
-		for(i=0; i<=60; i++) {
-			minute[i] = counter;
-			counter = 0;
+		for(i=0; i<60; i++) {
+			delay(1000);
+			minute[i] = rpm;
+			rpm = 0;
 			printf("-");
 			fflush(stdout);
-			delay(1000);
+			//printf("%i rps\n", minute[i]);
 		}
+		//for (i=0; i<60
 		printf("\n");
-		printf("RPM: %i\n", sum(minute, 60));
-		printf("AVG: %i\n", avg(minute, 60));
-		printf("MIN: %i\n", min(minute, 60));
-		printf("MAX: %i\n", max(minute, 60));
-		//sendToServer(0, 0, 0);
+		double sum = calcSum(minute, 60) / 3;
+		double min = calcMin(minute, 60) / 3;
+		double max = calcMax(minute, 60) / 3;
+		double avg = sum / 60;
+		printf("RPM: %f\n", sum);
+		printf("MIN: %f\n", min);
+		printf("MAX: %f\n", max);
+		printf("AVG: %f\n", avg);
+		sendToServer(sum, min, max, avg);
 	}
 }
 

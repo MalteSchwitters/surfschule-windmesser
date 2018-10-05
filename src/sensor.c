@@ -5,11 +5,11 @@
 
 #define SENSOR_PIN 0
 
-volatile int counter = 0;
+int rpm;
 
 void sensorInterrupt(void) {
-	counter++;
-	//printf("Interrupt #%i!\n", counter);
+	//printf("Interrupt #%i!\n", rpm);
+	rpm++;
 }
 
 int readSensor() {
@@ -31,5 +31,7 @@ int initSensor() {
 		fprintf (stderr, "Unable to setup ISR: %s\n", strerror(errno));
 		return 1;
 	}
+	pullUpDnControl(SENSOR_PIN, PUD_DOWN);
+	rpm = 0;
 	return 0;
 }
