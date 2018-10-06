@@ -11,9 +11,9 @@ void cleanup() {
     curl_easy_cleanup(curl);
 }
 
-int sendToServer(int sum, int min, int max, int avg) {
+int sendToServer(int sum) {
     char request[400];
-    snprintf(request, 400, "auth=%s&rpm=%i&min=%i&max=%i&avg=%i", APIKEY, sum, min, max, avg);
+    snprintf(request, 400, "auth=%s&rpm=%i", APIKEY, sum);
     //printf("Request: %s\n", request);
 
     CURLcode res;

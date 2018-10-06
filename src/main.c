@@ -51,15 +51,15 @@ void loop() {
 		}
 		//for (i=0; i<60
 		printf("\n");
-		double sum = calcSum(minute, 60) / 3;
-		double min = calcMin(minute, 60) / 3;
-		double max = calcMax(minute, 60) / 3;
+		double sum = calcSum(minute, 60);
+		double min = calcMin(minute, 60);
+		double max = calcMax(minute, 60);
 		double avg = sum / 60;
 		printf("RPM: %f\n", sum);
 		printf("MIN: %f\n", min);
 		printf("MAX: %f\n", max);
 		printf("AVG: %f\n", avg);
-		sendToServer(sum, min, max, avg);
+		sendToServer(sum);
 	}
 }
 
